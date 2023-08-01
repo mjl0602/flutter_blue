@@ -57,6 +57,7 @@ public class ProtoMaker {
                 a.setConnectable((flags & 0x2) > 0);
             }
         }
+        boolean hasError = false;
         if(scanRecord != null) {
             String deviceName = scanRecord.getDeviceName();
             if(deviceName != null) {
@@ -66,19 +67,23 @@ public class ProtoMaker {
             if(txPower != Integer.MIN_VALUE) {
                 a.setTxPowerLevel(Protos.Int32Value.newBuilder().setValue(txPower));
             }
-            // Manufacturer Specific Data
-            SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
-            for (int i = 0; i < msd.size(); i++) {
-                int key = msd.keyAt(i);
-                byte[] value = msd.valueAt(i);
-                a.putManufacturerData(key, ByteString.copyFrom(value));
-            }
-            // Service Data
-            Map<ParcelUuid, byte[]> serviceData = scanRecord.getServiceData();
-            for (Map.Entry<ParcelUuid, byte[]> entry : serviceData.entrySet()) {
-                ParcelUuid key = entry.getKey();
-                byte[] value = entry.getValue();
-                a.putServiceData(key.getUuid().toString(), ByteString.copyFrom(value));
+            try{
+                // Manufacturer Specific Data
+                SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
+                for (int i = 0; i < msd.size(); i++) {
+                    int key = msd.keyAt(i);
+                    byte[] value = msd.valueAt(i);
+                    a.putManufacturerData(key, ByteString.copyFrom(value));
+                }
+                // Service Data
+                Map<ParcelUuid, byte[]> serviceData = scanRecord.getServiceData();
+                for (Map.Entry<ParcelUuid, byte[]> entry : serviceData.entrySet()) {
+                    ParcelUuid key = entry.getKey();
+                    byte[] value = entry.getValue();
+                    a.putServiceData(key.getUuid().toString(), ByteString.copyFrom(value));
+                }
+            } catch (Exception error) {
+                hasError = true;
             }
             // Service UUIDs
             List<ParcelUuid> serviceUuids = scanRecord.getServiceUuids();
@@ -89,7 +94,7 @@ public class ProtoMaker {
             }
         }
         p.setRssi(scanResult.getRssi());
-        p.setAdvertisementData(a.build());
+        if(!hasError) p.setAdvertisementData(a.build());
         return p.build();
     }
 
