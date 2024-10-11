@@ -9,7 +9,7 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.0'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.15'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.9.1'
     }
 }
 
@@ -40,7 +40,7 @@ android {
 
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.17.3'
+        artifact = 'com.google.protobuf:protoc:3.21.7'
     }
     generateProtoTasks {
         all().each { task ->
@@ -54,5 +54,5 @@ protobuf {
 }
 
 dependencies {
-    implementation 'com.google.protobuf:protobuf-javalite:3.17.3'
+    implementation 'com.google.protobuf:protobuf-javalite:3.21.7'
 }
