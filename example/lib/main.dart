@@ -18,16 +18,121 @@ class FlutterBlueApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       color: Colors.lightBlue,
-      home: StreamBuilder<BluetoothState>(
-          stream: FlutterBlue.instance.state,
-          initialData: BluetoothState.unknown,
-          builder: (c, snapshot) {
-            final state = snapshot.data;
-            if (state == BluetoothState.on) {
-              return FindDevicesScreen();
-            }
-            return BluetoothOffScreen(state: state);
-          }),
+      home: BoundTestPage(),
+      // home: StreamBuilder<BluetoothState>(
+      //   stream: FlutterBlue.instance.state,
+      //   initialData: BluetoothState.unknown,
+      //   builder: (c, snapshot) {
+      //     final state = snapshot.data;
+      //     if (state == BluetoothState.on) {
+      //       return FindDevicesScreen();
+      //     }
+      //     return BluetoothOffScreen(state: state);
+      //   },
+      // ),
+    );
+  }
+}
+
+class BoundTestPage extends StatefulWidget {
+  const BoundTestPage({Key? key}) : super(key: key);
+
+  @override
+  State<BoundTestPage> createState() => _BoundTestPageState();
+}
+
+class _BoundTestPageState extends State<BoundTestPage> {
+  List<BluetoothDevice> deviceList = [];
+  Map<String, BluetoothDeviceState> stateMap = {};
+
+  /// 加载已绑定设备
+  reloadBoundedDevices() async {
+    final res = await FlutterBlue.instance.boundedDevices;
+    for (var eachDevice in res) {
+      final state = await eachDevice.currentState();
+      stateMap[eachDevice.id.id] = state;
+    }
+    setState(() {
+      deviceList = res;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    reloadBoundedDevices();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Bounded Device Test'),
+        actions: [
+          IconButton(
+            onPressed: reloadBoundedDevices,
+            icon: Icon(Icons.refresh),
+          )
+        ],
+      ),
+      body: ListView(
+        children: [
+          for (final device in deviceList)
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${device.name} ${device.id.id}'),
+                      Text(
+                        stateMap[device.id.id]?.toString() ?? "--",
+                        style: TextStyle(
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    child: Row(
+                      children: [
+                        TextButton(
+                          child: Text('连接'),
+                          onPressed: () async {
+                            final time = DateTime.now();
+                            await device.connect();
+                            print(
+                              'Connect Time Cost:'
+                              '${DateTime.now().difference(time).inMilliseconds}ms',
+                            );
+                            await device.discoverServices();
+                            print(
+                              'DiscoverServices Time Cost:'
+                              '${DateTime.now().difference(time).inMilliseconds}ms',
+                            );
+                            await reloadBoundedDevices();
+                          },
+                        ),
+                        TextButton(
+                          child: Text('断开'),
+                          onPressed: () async {
+                            await device.disconnect();
+                            await reloadBoundedDevices();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+        ],
+      ),
     );
   }
 }

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import androidx.core.app.ActivityCompat;
@@ -267,9 +268,23 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 Protos.ConnectedDevicesResponse.Builder p = Protos.ConnectedDevicesResponse.newBuilder();
                 for(BluetoothDevice d : devices) {
                     p.addDevices(ProtoMaker.from(d));
+                    log(LogLevel.EMERGENCY, "ConnectedDevice: " + d.getAddress());
                 }
                 result.success(p.build().toByteArray());
-                log(LogLevel.EMERGENCY, "mDevices size: " + mDevices.size());
+                log(LogLevel.EMERGENCY, "ConnectedDevices size: " + mDevices.size());
+                break;
+            }
+
+            case "getBondedDevices":
+            {
+                Set<BluetoothDevice> devices = mBluetoothAdapter.getBondedDevices();
+                Protos.ConnectedDevicesResponse.Builder p = Protos.ConnectedDevicesResponse.newBuilder();
+                for(BluetoothDevice d : devices) {
+                    p.addDevices(ProtoMaker.from(d));
+                    log(LogLevel.EMERGENCY, "BondedDevice: " + d.getAddress());
+                }
+                result.success(p.build().toByteArray());
+                log(LogLevel.EMERGENCY, "BondedDevices size: " + mDevices.size());
                 break;
             }
 
@@ -327,6 +342,8 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                     if(state == BluetoothProfile.STATE_DISCONNECTED) {
                         gattServer.close();
                     }
+                } else {
+                  log(LogLevel.EMERGENCY, "[DISCONNECT]Connection not found: " + deviceId);
                 }
                 result.success(null);
                 break;

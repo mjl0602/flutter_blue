@@ -106,6 +106,14 @@ class BluetoothDevice {
         .map((p) => BluetoothDeviceState.values[p.state.value]);
   }
 
+  /// Just check the connect state directly
+  Future<BluetoothDeviceState> currentState() {
+    return FlutterBlue.instance._channel
+        .invokeMethod('deviceState', id.toString())
+        .then((buffer) => new protos.DeviceStateResponse.fromBuffer(buffer))
+        .then((p) => BluetoothDeviceState.values[p.state.value]);
+  }
+
   /// The MTU size in bytes
   Stream<int> get mtu async* {
     yield await FlutterBlue.instance._channel
