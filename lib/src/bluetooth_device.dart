@@ -17,31 +17,27 @@ class BluetoothDevice {
   BehaviorSubject<bool> _isDiscoveringServices = BehaviorSubject.seeded(false);
   Stream<bool> get isDiscoveringServices => _isDiscoveringServices.stream;
 
-  /// Establishes a connection to the Bluetooth Device.
+  /// Connect with timeout
   Future<void> connect({
     Duration? timeout,
+    bool autoConnect = true,
+  }) async {
+    if (timeout != null)
+      return _connect(autoConnect: autoConnect).timeout(timeout);
+    else
+      return _connect(autoConnect: autoConnect);
+  }
+
+  /// Establishes a connection to the Bluetooth Device.
+  Future<void> _connect({
     bool autoConnect = true,
   }) async {
     var request = protos.ConnectRequest.create()
       ..remoteId = id.toString()
       ..androidAutoConnect = autoConnect;
-
-    Timer? timer;
-    if (timeout != null) {
-      timer = Timer(timeout, () {
-        disconnect();
-        throw TimeoutException('Failed to connect in time.', timeout);
-      });
-    }
-
     await FlutterBlue.instance._channel
         .invokeMethod('connect', request.writeToBuffer());
-
     await state.firstWhere((s) => s == BluetoothDeviceState.connected);
-
-    timer?.cancel();
-
-    return;
   }
 
   /// Cancels connection to the Bluetooth Device
@@ -106,7 +102,7 @@ class BluetoothDevice {
         .map((p) => BluetoothDeviceState.values[p.state.value]);
   }
 
-  /// Just check the connect state directly
+  /// Just check current connect state directly
   Future<BluetoothDeviceState> currentState() {
     return FlutterBlue.instance._channel
         .invokeMethod('deviceState', id.toString())
@@ -127,6 +123,14 @@ class BluetoothDevice {
         .map((buffer) => new protos.MtuSizeResponse.fromBuffer(buffer))
         .where((p) => p.remoteId == id.toString())
         .map((p) => p.mtu);
+  }
+
+  /// Just check current MTU directly
+  Future<int> currentMTU() {
+    return FlutterBlue.instance._channel
+        .invokeMethod('mtu', id.toString())
+        .then((buffer) => new protos.MtuSizeResponse.fromBuffer(buffer))
+        .then((p) => p.mtu);
   }
 
   /// Request to change the MTU Size

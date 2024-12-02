@@ -18,22 +18,23 @@ class FlutterBlueApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       color: Colors.lightBlue,
-      home: BoundTestPage(),
-      // home: StreamBuilder<BluetoothState>(
-      //   stream: FlutterBlue.instance.state,
-      //   initialData: BluetoothState.unknown,
-      //   builder: (c, snapshot) {
-      //     final state = snapshot.data;
-      //     if (state == BluetoothState.on) {
-      //       return FindDevicesScreen();
-      //     }
-      //     return BluetoothOffScreen(state: state);
-      //   },
-      // ),
+      // home: BoundTestPage(),
+      home: StreamBuilder<BluetoothState>(
+        stream: FlutterBlue.instance.state,
+        initialData: BluetoothState.unknown,
+        builder: (c, snapshot) {
+          final state = snapshot.data;
+          if (state == BluetoothState.on) {
+            return FindDevicesScreen();
+          }
+          return BluetoothOffScreen(state: state);
+        },
+      ),
     );
   }
 }
 
+/// 用于测试绑定设备的连接断开
 class BoundTestPage extends StatefulWidget {
   const BoundTestPage({Key? key}) : super(key: key);
 
