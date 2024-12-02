@@ -7,6 +7,24 @@
 </p>
 <br><br>
 
+## THIS IS A FORK VERSION OF FLUTTER_BLUE
+
+Since the original flutter_blue is no longer maintained, I forked the original repository and continued to maintain it for newer versions of Flutter:
+
+- Fixed the crash issue caused by the UUID class on higher Android versions.
+- Fixed the issue with the example not running on higher Android versions.
+- Added a method to retrieve already bonded devices.
+- Added more intuitive functions for getting device connection status and MTU.
+- Fixed the issue where the timeout setting in the original connect method would not throw in the current await process.
+
+由于原先的flutter_blue不再维护，我fork了原仓库并针对新版本flutter继续维护：
+
+- 修复了在高版本安卓上由于UUID类导致的闪退问题。
+- 修复了示例在高版本安卓上运行的问题。
+- 增加了获取已绑定设备的方法。
+- 增加了更直观的获取设备连接状态和MTU的函数。
+- 修复了原来的connect方法中的timeout设置并不会在当前的await流程中抛出异常的问题。
+
 ## Introduction
 
 FlutterBlue is a bluetooth plugin for [Flutter](https://flutter.dev), a new app SDK to help developers build modern multi-platform apps.
