@@ -1,6 +1,6 @@
 name: flutter_bluex
 description: flutter_blue的一个fork版本，为flutter_blue提供持续的更新支持
-version: 0.9.2
+version: 0.9.3
 homepage: https://github.com/mjl0602/flutter_blue
 
 environment:

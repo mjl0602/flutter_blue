@@ -1,13 +1,6 @@
-[![pub package](https://img.shields.io/pub/v/flutter_blue.svg)](https://pub.dartlang.org/packages/flutter_blue)
-[![Chat](https://img.shields.io/discord/634853295160033301.svg?style=flat-square&colorB=758ED3)](https://discord.gg/Yk5Efra)
+[![pub package](https://img.shields.io/pub/v/flutter_bluex.svg)](https://pub.dartlang.org/packages/flutter_bluex)
 
-<br>
-<p align="center">
-<img alt="FlutterBlue" src="https://github.com/pauldemarco/flutter_blue/blob/master/site/flutterblue.png?raw=true" />
-</p>
-<br><br>
-
-## THIS IS A FORK VERSION OF FLUTTER_BLUE
+## THIS IS A FORK VERSION OF FLUTTER_BLUE(这是一个fork版本，使用前请注意！)
 
 Since the original flutter_blue is no longer maintained, I forked the original repository and continued its maintenance for newer versions of Flutter:
 
@@ -24,6 +17,12 @@ Since the original flutter_blue is no longer maintained, I forked the original r
 - 修复了在高版本安卓上由于一个无用的 UUID 类导致的闪退问题。
 - 修复了原来的 connect 方法中的 timeout 设置并不会在当前的 await 流程中抛出异常的问题。
 - 修复了示例在高版本安卓上运行的问题。
+
+<br>
+<p align="center">
+<img alt="FlutterBlue" src="https://github.com/pauldemarco/flutter_blue/blob/master/site/flutterblue.png?raw=true" />
+</p>
+<br><br>
 
 ## Introduction
 
