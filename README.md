@@ -1,10 +1,10 @@
 [![pub package](https://img.shields.io/pub/v/flutter_bluex.svg)](https://pub.dartlang.org/packages/flutter_bluex)
 
-## THIS IS A FORK VERSION OF FLUTTER_BLUE(这是一个fork版本，使用前请注意！)
+## THIS IS A FORK VERSION OF FLUTTER_BLUE(这是一个 fork 版本，使用前请注意！)
 
 Since the original flutter_blue is no longer maintained, I forked the original repository and continued its maintenance for newer versions of Flutter:
 
-- Added a method to retrieve bonded (paired) devices, allowing these devices to connect without scanning(Android ONLY).
+- Added a method to retrieve bound (paired) devices, allowing these devices to connect without scanning(Android ONLY).
 - Introduced more intuitive functions to directly obtain the device connection status and MTU, instead of getting the first status from a stream.
 - Fixed a crash issue on higher versions of Android caused by a redundant UUID class.
 - Corrected the issue where the timeout setting in the original connect method would not throw an exception in the current await process.

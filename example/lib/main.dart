@@ -47,8 +47,8 @@ class _BoundTestPageState extends State<BoundTestPage> {
   Map<String, BluetoothDeviceState> stateMap = {};
 
   /// 加载已绑定设备
-  reloadBoundedDevices() async {
-    final res = await FlutterBlue.instance.boundedDevices;
+  reloadBoundDevices() async {
+    final res = await FlutterBlue.instance.boundDevices;
     for (var eachDevice in res) {
       final state = await eachDevice.currentState();
       stateMap[eachDevice.id.id] = state;
@@ -61,17 +61,17 @@ class _BoundTestPageState extends State<BoundTestPage> {
   @override
   void initState() {
     super.initState();
-    reloadBoundedDevices();
+    reloadBoundDevices();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bounded Device Test'),
+        title: Text('Bound Device Test'),
         actions: [
           IconButton(
-            onPressed: reloadBoundedDevices,
+            onPressed: reloadBoundDevices,
             icon: Icon(Icons.refresh),
           )
         ],
@@ -116,14 +116,14 @@ class _BoundTestPageState extends State<BoundTestPage> {
                               'DiscoverServices Time Cost:'
                               '${DateTime.now().difference(time).inMilliseconds}ms',
                             );
-                            await reloadBoundedDevices();
+                            await reloadBoundDevices();
                           },
                         ),
                         TextButton(
                           child: Text('断开'),
                           onPressed: () async {
                             await device.disconnect();
-                            await reloadBoundedDevices();
+                            await reloadBoundDevices();
                           },
                         ),
                       ],

@@ -275,16 +275,16 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 break;
             }
 
-            case "getBondedDevices":
+            case "getBoundDevices":
             {
-                Set<BluetoothDevice> devices = mBluetoothAdapter.getBondedDevices();
+                Set<BluetoothDevice> devices = mBluetoothAdapter.getBoundDevices();
                 Protos.ConnectedDevicesResponse.Builder p = Protos.ConnectedDevicesResponse.newBuilder();
                 for(BluetoothDevice d : devices) {
                     p.addDevices(ProtoMaker.from(d));
-                    log(LogLevel.EMERGENCY, "BondedDevice: " + d.getAddress());
+                    log(LogLevel.EMERGENCY, "BoundDevice: " + d.getAddress());
                 }
                 result.success(p.build().toByteArray());
-                log(LogLevel.EMERGENCY, "BondedDevices size: " + mDevices.size());
+                log(LogLevel.EMERGENCY, "BoundDevices size: " + mDevices.size());
                 break;
             }
 
