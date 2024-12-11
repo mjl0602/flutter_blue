@@ -18,7 +18,7 @@ class FlutterBlueApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       color: Colors.lightBlue,
-      // home: BoundTestPage(),
+      // home: BondedTestPage(),
       home: StreamBuilder<BluetoothState>(
         stream: FlutterBlue.instance.state,
         initialData: BluetoothState.unknown,
@@ -35,20 +35,20 @@ class FlutterBlueApp extends StatelessWidget {
 }
 
 /// 用于测试绑定设备的连接断开
-class BoundTestPage extends StatefulWidget {
-  const BoundTestPage({Key? key}) : super(key: key);
+class BondedTestPage extends StatefulWidget {
+  const BondedTestPage({Key? key}) : super(key: key);
 
   @override
-  State<BoundTestPage> createState() => _BoundTestPageState();
+  State<BondedTestPage> createState() => _BondedTestPageState();
 }
 
-class _BoundTestPageState extends State<BoundTestPage> {
+class _BondedTestPageState extends State<BondedTestPage> {
   List<BluetoothDevice> deviceList = [];
   Map<String, BluetoothDeviceState> stateMap = {};
 
   /// 加载已绑定设备
-  reloadBoundDevices() async {
-    final res = await FlutterBlue.instance.boundDevices;
+  reloadBondedDevices() async {
+    final res = await FlutterBlue.instance.bondedDevices;
     for (var eachDevice in res) {
       final state = await eachDevice.currentState();
       stateMap[eachDevice.id.id] = state;
@@ -61,17 +61,17 @@ class _BoundTestPageState extends State<BoundTestPage> {
   @override
   void initState() {
     super.initState();
-    reloadBoundDevices();
+    reloadBondedDevices();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bound Device Test'),
+        title: Text('Bonded Device Test'),
         actions: [
           IconButton(
-            onPressed: reloadBoundDevices,
+            onPressed: reloadBondedDevices,
             icon: Icon(Icons.refresh),
           )
         ],
@@ -116,14 +116,14 @@ class _BoundTestPageState extends State<BoundTestPage> {
                               'DiscoverServices Time Cost:'
                               '${DateTime.now().difference(time).inMilliseconds}ms',
                             );
-                            await reloadBoundDevices();
+                            await reloadBondedDevices();
                           },
                         ),
                         TextButton(
                           child: Text('断开'),
                           onPressed: () async {
                             await device.disconnect();
-                            await reloadBoundDevices();
+                            await reloadBondedDevices();
                           },
                         ),
                       ],

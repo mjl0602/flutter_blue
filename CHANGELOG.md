@@ -1,4 +1,4 @@
-## 0.9.4
+## 0.9.5
 - 修复方法名
 
 ## 0.9.3
@@ -7,7 +7,7 @@
 ## 0.9.0
 - Fixed the crash issue caused by the UUID class on higher Android versions.
 - Fixed the issue with the example not running on higher Android versions.
-- Added a method to retrieve already bound devices.
+- Added a method to retrieve already bonded devices.
 - Added more intuitive functions for getting device connection status and MTU.
 - Fixed the issue where the timeout setting in the original connect method would not throw in the current await process.
 
