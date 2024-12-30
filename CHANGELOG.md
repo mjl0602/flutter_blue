@@ -1,4 +1,4 @@
-## 0.9.5
+## 0.9.6
 - 修复flutter_bluex.podspec文件名
 
 ## 0.9.5
