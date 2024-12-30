@@ -3,7 +3,7 @@
 # Run `pod lib lint flutter_blue.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'flutter_blue'
+  s.name             = 'flutter_bluex'
   s.version          = '0.0.1'
   s.summary          = 'Bluetooth Low Energy plugin for Flutter.'
   s.description      = <<-DESC
