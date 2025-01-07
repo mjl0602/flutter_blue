@@ -12,7 +12,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_blue:
+  flutter_bluex:
     path: ../
 
 flutter:
