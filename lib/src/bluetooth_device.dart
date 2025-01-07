@@ -14,8 +14,34 @@ class BluetoothDevice {
         name = p.name,
         type = BluetoothDeviceType.values[p.type.value];
 
+  BluetoothDevice._({
+    required this.id,
+    required this.name,
+    required this.type,
+  });
+
   BehaviorSubject<bool> _isDiscoveringServices = BehaviorSubject.seeded(false);
   Stream<bool> get isDiscoveringServices => _isDiscoveringServices.stream;
+
+  /// Restore Connection With Mac address on android
+  static Future<BluetoothDevice?> restoreWithMac({
+    required String deviceName,
+    required String macAddress,
+  }) async {
+    if (!Platform.isAndroid) return null;
+    var request = protos.ConnectRequest.create()
+      ..remoteId = macAddress
+      ..androidAutoConnect = false;
+    await FlutterBlue.instance._channel
+        .invokeMethod('connect', request.writeToBuffer());
+    final device = BluetoothDevice._(
+      id: DeviceIdentifier(macAddress),
+      name: deviceName,
+      type: BluetoothDeviceType.le,
+    );
+    await device.state.firstWhere((s) => s == BluetoothDeviceState.connected);
+    return device;
+  }
 
   /// Connect with timeout
   Future<void> connect({
