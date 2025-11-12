@@ -57,7 +57,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
+// import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 
 
@@ -90,15 +90,15 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     private boolean allowDuplicates = false;
 
     /** Plugin registration. */
-    public static void registerWith(Registrar registrar) {
-        FlutterBluePlugin instance = new FlutterBluePlugin();
-        Activity activity = registrar.activity();
-        Application application = null;
-        if (registrar.context() != null) {
-            application = (Application) (registrar.context().getApplicationContext());
-        }
-        instance.setup(registrar.messenger(), application, activity, registrar, null);
-    }
+    // public static void registerWith(Registrar registrar) {
+    //     FlutterBluePlugin instance = new FlutterBluePlugin();
+    //     Activity activity = registrar.activity();
+    //     Application application = null;
+    //     if (registrar.context() != null) {
+    //         application = (Application) (registrar.context().getApplicationContext());
+    //     }
+    //     instance.setup(registrar.messenger(), application, activity, registrar, null);
+    // }
 
     public FlutterBluePlugin() {}
 
@@ -120,7 +120,6 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 pluginBinding.getBinaryMessenger(),
                 (Application) pluginBinding.getApplicationContext(),
                 activityBinding.getActivity(),
-                null,
                 activityBinding);
     }
 
@@ -143,7 +142,6 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             final BinaryMessenger messenger,
             final Application application,
             final Activity activity,
-            final PluginRegistry.Registrar registrar,
             final ActivityPluginBinding activityBinding) {
         synchronized (initializationLock) {
             Log.i(TAG, "setup");
@@ -156,13 +154,8 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             stateChannel.setStreamHandler(stateHandler);
             mBluetoothManager = (BluetoothManager) application.getSystemService(Context.BLUETOOTH_SERVICE);
             mBluetoothAdapter = mBluetoothManager.getAdapter();
-            if (registrar != null) {
-                // V1 embedding setup for activity listeners.
-                registrar.addRequestPermissionsResultListener(this);
-            } else {
-                // V2 embedding setup for activity listeners.
-                activityBinding.addRequestPermissionsResultListener(this);
-            }
+            // V2 embedding setup for activity listeners.
+            activityBinding.addRequestPermissionsResultListener(this);
         }
     }
 

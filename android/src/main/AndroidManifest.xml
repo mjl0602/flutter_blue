@@ -20,4 +20,6 @@
     <!-- Needed only if your app communicates with already-paired Bluetooth
          devices. -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <meta-data android:name="flutterEmbedding" android:value="2"/>
 </manifest>
