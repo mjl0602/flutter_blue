@@ -1,3 +1,6 @@
+## 0.9.11
+- 补充了安卓的namespace配置
+
 ## 0.9.10
 - 补充了必须的ACCESS_FINE_LOCATION权限
 
